@@ -1,0 +1,64 @@
+<%- include('../partials/header') %>
+<div class="container">
+  <div style="max-width:720px; margin:20px auto;" class="form">
+    <h3>Edit Medicine</h3>
+    <form method="POST" action="/admin/editMedicine/<%= med._id %>" enctype="multipart/form-data">
+      
+      <!-- Name & Brand -->
+      <label>Name</label>
+      <input name="name" value="<%= med.name %>" required />
+
+      <label>Brand</label>
+      <input name="brand" value="<%= med.brand %>" />
+
+      <!-- Price, Discount, Stock -->
+      <label>Price</label>
+      <input name="price" type="number" value="<%= med.price %>" required />
+
+      <label>Discount</label>
+      <input name="discount" type="number" value="<%= med.discount %>" />
+
+      <label>Stock</label>
+      <input name="stock" type="number" value="<%= med.stock %>" required />
+
+      <!-- Expiry Date -->
+      <label>Expiry Date</label>
+      <input name="expDate" type="date" value="<%= med.expDate ? med.expDate.toISOString().split('T')[0] : '' %>" />
+
+      <!-- Medicine Category -->
+      <label>Medicine Category</label>
+      <select name="category">
+        <option value="Cold & Cough" <%= med.category === "Cold & Cough" ? "selected" : "" %>>Cold & Cough</option>
+        <option value="Diabetes" <%= med.category === "Diabetes" ? "selected" : "" %>>Diabetes</option>
+        <option value="Heart Care" <%= med.category === "Heart Care" ? "selected" : "" %>>Heart Care</option>
+        <option value="Skin Care" <%= med.category === "Skin Care" ? "selected" : "" %>>Skin Care</option>
+        <option value="Digestive Health" <%= med.category === "Digestive Health" ? "selected" : "" %>>Digestive Health</option>
+      </select>
+
+      <label>Or Enter Custom Category</label>
+      <input type="text" name="customCategory" placeholder="Enter Your Own Category" value="<%= med.category && !["Cold & Cough","Diabetes","Heart Care","Skin Care","Digestive Health"].includes(med.category) ? med.category : '' %>">
+
+      <!-- Medicine Form -->
+      <label>Medicine Form</label>
+      <select name="form">
+        <option value="Tablet" <%= med.form === "Tablet" ? "selected" : "" %>>Tablet</option>
+        <option value="Capsule" <%= med.form === "Capsule" ? "selected" : "" %>>Capsule</option>
+        <option value="Syrup" <%= med.form === "Syrup" ? "selected" : "" %>>Syrup</option>
+        <option value="Injection" <%= med.form === "Injection" ? "selected" : "" %>>Injection</option>
+        <option value="Drops" <%= med.form === "Drops" ? "selected" : "" %>>Drops</option>
+        <option value="Ointment" <%= med.form === "Ointment" ? "selected" : "" %>>Ointment</option>
+      </select>
+
+      <!-- Image -->
+      <label>Image (leave to keep same)</label>
+      <input name="image" type="file" accept="image/*" />
+      <div style="margin:8px 0;">
+        <img src="/uploads/medicines/<%= med.image || 'placeholder.png' %>" 
+             style="width:140px; height:90px; object-fit:cover; border-radius:8px;" />
+      </div>
+
+      <button class="btn btn-primary">Save</button>
+    </form>
+  </div>
+</div>
+<%- include('../partials/footer') %>

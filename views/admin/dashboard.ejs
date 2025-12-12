@@ -1,0 +1,158 @@
+<%- include('../partials/header') %>
+
+<div class="container">
+
+  <!-- Top Stats -->
+  <div class="top-row" style="display:flex; gap:20px; flex-wrap:wrap; margin-bottom:20px;">
+    <div class="top-card" style="flex:1; background:#f0f0f0; padding:20px; border-radius:8px;">
+      <h3>Admin Dashboard</h3>
+    </div>
+    <div class="top-card" style="flex:1; background:#d1e7dd; padding:20px; border-radius:8px;">
+      <p>Total Medicines</p>
+      <h2><%= totalMedicines %></h2>
+    </div>
+    <div class="top-card" style="flex:1; background:#f8d7da; padding:20px; border-radius:8px;">
+      <p>Pending Orders</p>
+      <h2><%= pendingOrders %></h2>
+    </div>
+    <div class="top-card" style="flex:1; background:#cfe2ff; padding:20px; border-radius:8px;">
+      <p>Completed Orders</p>
+      <h2><%= completedOrders %></h2>
+    </div>
+    <div class="top-card" style="flex:1; background:#fff3cd; padding:20px; border-radius:8px;">
+      <p>Total Users</p>
+      <h2><%= totalUsers %></h2>
+    </div>
+    <div class="top-card" style="flex:1; display:flex; align-items:center; justify-content:center;">
+      <a class="btn btn-primary" href="/admin/stock/add/">Add Medicine</a>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div style="display:flex; gap:20px; flex-wrap:wrap;">
+
+    <!-- Medicines Table -->
+    <div style="flex:1; min-width:300px;" class="form">
+      <h4>Medicines</h4>
+      <table class="table" style="width:100%; border-collapse:collapse;">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Brand</th>
+            <th>Stock</th>
+            <th>Expiry</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% meds.forEach(m => { %>
+          <tr style="border-bottom:1px solid #ddd;">
+            <td><%= m.name %></td>
+            <td><%= m.brand %></td>
+            <td style="<%= m.stock <=5 ? 'color:red;font-weight:bold;' : '' %>"><%= m.stock %></td>
+            <td><%= m.expDate ? m.expDate.toISOString().split('T')[0] : '-' %></td>
+            <td>
+              <a class="btn btn-outline" href="/admin/editMedicine/<%= m._id %>">Edit</a>
+              <form style="display:inline;" method="POST" action="/admin/deleteMedicine/<%= m._id %>">
+                <button class="btn" style="background:#ff6b6b;color:white;border-radius:8px;padding:6px 10px; margin-top: 20px;">Delete</button>
+              </form>
+            </td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Orders Table -->
+    <div style="flex:1; min-width:300px; max-width: 100%;" class="form">
+      <h4>User Orders</h4>
+      <table class="table" id="orderTable" style="width:100%; border-collapse:collapse;">
+        <thead>
+          <tr>
+            <th>User</th>
+            <th>Medicine</th>
+            <th>Address</th>
+            <th>Map</th>
+            <th>Price</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% orders.forEach(order => { %>
+          <tr>
+            <td><%= order.userId.name %></td>
+            <td>Hello</td>
+            <td><%= order.address %></td>
+
+<td>
+  <% if(order.latitude && order.longitude) { %>
+    <a 
+      href="https://www.google.com/maps?q=<%= order.latitude %>,<%= order.longitude %>"
+      target="_blank"
+      class="btn btn-outline"
+    >
+      View Location
+    </a>
+  <% } else { %>
+    No GPS
+  <% } %>
+</td>
+
+            <td>₹<%= order.finalPrice %></td>
+            <td><%= order.status %></td>
+            <td>
+              <% if(order.status === "Pending") { %>
+              <form method="POST" action="/admin/order/complete/<%= order._id %>">
+                <button class="btn" style="background:#28a745;color:white;border-radius:6px;padding:5px 10px;">Mark Completed</button>
+              </form>
+              <% } else { %>
+                Completed
+              <% } %>
+            </td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Low Stock Chart -->
+    <div style="width:430px; margin-right:20%;" class="form" id="graphform">
+      <h4>Low Stock (Graph)</h4>
+      <div style="height:240px;">
+        <canvas id="lowStockChart"></canvas>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- Chart.js Script -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+const lowStockData = {
+  labels: <%- JSON.stringify(meds.map(m => m.name)) %>,
+  datasets: [{
+    label: 'Stock Quantity',
+    data: <%- JSON.stringify(meds.map(m => m.stock)) %>,
+    backgroundColor: <%- JSON.stringify(meds.map(m => m.stock <= 5 ? 'rgba(255, 99, 132, 0.6)' : 'rgba(54, 162, 235, 0.6)')) %>,
+    borderColor: <%- JSON.stringify(meds.map(m => m.stock <= 5 ? 'rgba(255, 99, 132, 1)' : 'rgba(54, 162, 235, 1)')) %>,
+    borderWidth: 1
+  }]
+};
+
+const config = {
+  type: 'bar',
+  data: lowStockData,
+  options: {
+    scales: {
+      y: { beginAtZero: true }
+    }
+  }
+};
+
+new Chart(document.getElementById('lowStockChart'), config);
+</script>
+
+<%- include('../partials/footer') %>

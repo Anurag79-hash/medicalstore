@@ -1,0 +1,27 @@
+<%- include('../partials/header') %>
+
+<div class="container">
+  <div style="max-width:520px; margin:40px auto;">
+    <div class="form">
+      <h3>Edit Profile</h3>
+      <form method="POST" action="/editprofile" >
+        
+        <label>Full Name</label>
+        <input type="text" name="name" value="<%= user.name %>" required />
+
+        <label>Email</label>
+        <input type="email" name="email" value="<%= user.email %>" required />
+
+        <label>New Password (leave blank to keep current)</label>
+        <input type="password" name="password" placeholder="New Password" />
+
+        <label>Confirm New Password</label>
+        <input type="password" name="confirmpassword" placeholder="Confirm Password" />
+
+        <button class="btn btn-primary" type="submit">Save Changes</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>

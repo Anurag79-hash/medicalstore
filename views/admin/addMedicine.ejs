@@ -1,0 +1,36 @@
+<%- include('../partials/header') %>
+<div class="container">
+  <div style="max-width:720px; margin:20px auto;" class="form">
+    <h3>Add Medicine</h3>
+    <form method="POST" action="/admin/stock/add" enctype="multipart/form-data">
+      <label>Name</label><input name="name" required />
+      <label>Brand</label><input name="brand" />
+      <label>Price</label><input name="price" type="number" required />
+         <label>Discount</label><input name="discount" type="number" required />
+      <label>Stock</label><input name="stock" type="number" required />
+      <label>Expiry Date</label><input name="expDate" type="date" />
+      <label>Image</label><input name="image" type="file" accept="image/*" />
+      <label >Medicine Category</label>
+      <select name="category" >
+        <option value="Cold & Cough">Cold & Cough</option>
+        <option value="Diabetes">Diabetes</option>
+        <option value="Heart Care">Heart Care</option>
+        <option value="Skin Care">Skin Care</option>
+        <option value="Digestive Health">Digestive Health</option>
+      </select>
+      <label >Or Enter Custom Category</label>
+      <input type="text" name="customCategory" placeholder="Enter Your Own Category">
+      <label >Medicine Form</label>
+      <select name="form">
+        <option value="Tablet">Tablet</option>
+        <option value="Capsule">Capsule</option>
+        <option value="Syrup">Syrup</option>
+        <option value="Injection">Injection</option>
+        <option value="Drops">Drops</option>
+        <option value="Ointment">Ointment</option>
+      </select>
+      <button class="btn btn-primary" type="submit">Add Medicine</button>
+    </form>
+  </div>
+</div>
+<%- include('../partials/footer') %>

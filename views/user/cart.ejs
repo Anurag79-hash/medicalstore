@@ -1,0 +1,28 @@
+<%- include('../partials/header') %>
+<div class="container">
+  <h2>Your Cart</h2>
+  <div id="cartArea" class="form">
+    <div id="cartList"></div>
+    <div style="margin-top:12px;">
+      <button class="btn btn-primary" onclick="placeOrder()">Place Order</button>
+    </div>
+  </div>
+</div>
+<script>
+  // render cart
+  function renderCart(){
+    const cart = JSON.parse(localStorage.getItem('cart')||'[]');
+    const el = document.getElementById('cartList');
+    if(cart.length===0){ el.innerHTML = '<p class="small">Your cart is empty.</p>'; return; }
+    let html = '<table class="table"><thead><tr><th>Item</th><th>Qty</th><th>Price</th></tr></thead><tbody>';
+    let total=0;
+    cart.forEach(it=>{
+      html += `<tr><td>${it.name}</td><td>${it.qty}</td><td>₹${it.price*it.qty}</td></tr>`;
+      total += it.price*it.qty;
+    });
+    html += `</tbody></table><p class="small">Total: ₹${total}</p>`;
+    el.innerHTML = html;
+  }
+  renderCart();
+</script>
+<%- include('../partials/footer') %>

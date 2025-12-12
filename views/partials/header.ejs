@@ -1,0 +1,87 @@
+<link rel="stylesheet" href="/css/style.css">
+<header class="header">
+  <div class="brand">MediStore</div>
+
+  <!-- Hamburger for small screens -->
+  <div class="hamburger" id="hamburger">
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
+
+  <nav id="navMenu">
+   <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <% if(!user) {%>
+      <li><a href="/login">Login</a></li>
+      <li><a href="/register">Register</a></li>
+    <% } else { %>
+      <% if(user.role==="admin") {%>
+        <li><a href="/admin/dashboard">Dashboard</a></li>
+        <li><a href="/admin/stock/add">Add Stock</a></li>
+      <% } else {%>
+        <li><a href="/dashboard">Dashboard<%= user.roll %></a></li>
+        <li><a href="/editprofile">Edit Profile</a></li>
+      <% } %>
+      <li><a href="#" id="logoutBtn">Logout</a></li>
+      <li class="welcome">Welcome <%= user.name %></li>
+    <% }%>
+   </ul>
+  </nav>
+<% if (success) { %>
+  <div id="flash-success" 
+    style="background:#07d437;padding:10px;margin:10px 0;border-left:5px solid green;">
+    <%= success %>
+  </div>
+<% } %>
+
+<% if (error) { %>
+  <div id="flash-error" 
+    style="background:#df0517;padding:10px;margin:10px 0;border-left:5px solid red;">
+    <%= error %>
+  </div>
+<% } %>
+
+
+  <div id="logoutBtnPopup" class="popup">
+    <div class="popup-content">
+      <p>Are you sure you want to logout?</p>
+      <button id="yesLogout"> Yes</button>
+      <button id="noLogout">No</button>
+    </div>
+  </div>
+</header>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const logoutBtn = document.getElementById("logoutBtn");
+  const popup = document.getElementById("logoutBtnPopup");
+  const yesBtn = document.getElementById("yesLogout");
+  const noBtn = document.getElementById("noLogout");
+  const hamburger = document.getElementById("hamburger");
+  const navMenu = document.getElementById("navMenu");
+
+  logoutBtn?.addEventListener("click", () => {
+    popup.style.display = "flex";
+  });
+  noBtn?.addEventListener("click", () => {
+    popup.style.display = "none";
+  });
+  yesBtn?.addEventListener("click", () => {
+    window.location.href = "/logout";
+  });
+
+  // Toggle menu on small screens
+  hamburger?.addEventListener("click", () => {
+    navMenu.classList.toggle("active");
+  });
+});
+  setTimeout(() => {
+    const successMsg = document.getElementById("flash-success");
+    const errorMsg = document.getElementById("flash-error");
+
+    if (successMsg) successMsg.style.display = "none";
+    if (errorMsg) errorMsg.style.display = "none";
+  }, 3000); // 3000 = 3 seconds
+
+</script>

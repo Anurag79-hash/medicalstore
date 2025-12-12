@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>All Medicines</title>
+  <link rel="stylesheet" href="/css/style.css">
+
+</head>
+<body>
+
+  <%- include("../partials/header.ejs") %>
+
+  <div class="container" style="text-align:center; flex:1;">
+    <h2>All Medicines</h2>
+    <div class="search-box">
+  <input type="text" id="searchInput" placeholder="Search by name, brand, category...">
+</div>
+
+    <!-- FILTER FORM -->
+    <form action="/" method="get">
+      <div>
+        <select name="category">
+          <option value="all" <%= selectedCategory==="all"? "selected" : '' %>>All Categories</option>
+          <% categories.forEach(cat => { %>
+            <option value="<%= cat %>" <%= selectedCategory===cat ? "selected" : "" %>><%= cat %></option>
+          <% }) %>
+        </select>
+      </div>
+
+      <div>
+        <button>Apply Filters</button>
+      </div>
+    </form>
+
+    <div class="row">
+
+      <% medicines.forEach(medicine => { 
+          let finalPrice = medicine.discount 
+              ? medicine.price - (medicine.price * medicine.discount / 100)
+              : medicine.price;
+      %>
+
+      <div class="medicine-card"
+       data-name="<%= medicine.name.toLowerCase() %>"
+     data-brand="<%= medicine.brand.toLowerCase() %>"
+     data-category="<%= medicine.category.toLowerCase() %>"
+      >
+
+        <img src="<%= medicine.image %>" alt="">
+
+        <h4><%= medicine.name %></h4>
+
+        <p><strong>Brand:</strong> <%= medicine.brand %> <br>
+           <strong>Category:</strong> <%= medicine.category %> <br>
+           <strong>Form:</strong> <%= medicine.form %>
+        </p>
+
+        <!-- PRICE DISPLAY -->
+        <div class="price-line">
+          <% if (medicine.discount > 0) { %>
+            <span class="old-price">₹<%= medicine.price %></span>
+            <span class="new-price">₹<%= finalPrice.toFixed(2) %></span>
+            <span class="discount-tag"><%= medicine.discount %>% OFF</span>
+          <% } else { %>
+            <span class="new-price">₹<%= medicine.price %></span>
+          <% } %>
+        </div>
+
+        <!-- BUY BUTTON -->
+        <form action="/buy/<%= medicine._id %>" method="get">
+          <button class="buy-btn">Buy Now</button>
+        </form>
+
+      </div>
+
+      <% }) %>
+
+    </div>
+  </div>
+
+  <%- include("../partials/footer.ejs") %>
+  <script>
+  const searchInput = document.getElementById("searchInput");
+  const cards = document.querySelectorAll(".medicine-card");
+
+  searchInput.addEventListener("keyup", function () {
+    let value = this.value.toLowerCase();
+
+    cards.forEach(card => {
+      let name = card.dataset.name;
+      let brand = card.dataset.brand;
+      let category = card.dataset.category;
+
+      if (name.includes(value) || brand.includes(value) || category.includes(value)) {
+        card.style.display = "block";
+      } else {
+        card.style.display = "none";
+      }
+    });
+  });
+</script>
+</body>
+</html>

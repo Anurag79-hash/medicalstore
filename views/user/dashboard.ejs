@@ -1,0 +1,75 @@
+<%- include("../partials/header") %>
+
+<div class="container">
+  <h2>Your Dashboard</h2>
+  <p>Welcome <%= user?.name %></p>
+
+  <!-- PENDING ORDERS -->
+  <h3>🕒 Current Orders (Not Delivered Yet)</h3>
+  <table border="1" class="table">
+    <tr>
+      <th>Medicine</th>
+      <th>Price</th>
+      <th>Status</th>
+    </tr>
+
+    <% if(pendingOrders.length === 0) { %>
+      <tr><td colspan="3">No current orders.</td></tr>
+    <% } %>
+
+    <% pendingOrders.forEach(o => { %>
+      <tr>
+        <td><%= o.medicineId?.name %></td>
+        <td>₹<%= o?.finalPrice %></td>
+        <td><%= o.status %></td>
+      </tr>
+    <% }) %>
+  </table>
+
+  <br>
+
+  <!-- COMPLETED ORDERS -->
+  <h3>✔ Completed Orders</h3>
+  <table border="1" class="table">
+    <tr>
+      <th>Medicine</th>
+      <th>Price</th>
+      <th>Status</th>
+    </tr>
+
+    <% if(deliveredOrders.length === 0) { %>
+      <tr><td colspan="3">No completed orders yet.</td></tr>
+    <% } %>
+
+    <% deliveredOrders.forEach(o => { %>
+      <tr>
+        <td><%= o.medicineId?.name %></td>
+        <td>₹<%= o.medicineId?.price %></td>
+        <td>Completed</td>
+      </tr>
+    <% }) %>
+  </table>
+
+  <br>
+
+  <!-- ALL ORDERS -->
+  <h3>📜 Full Purchase History</h3>
+  <table border="1" class="table">
+    <tr>
+      <th>Medicine</th>
+      <th>Price</th>
+      <th>Status</th>
+    </tr>
+
+    <% allOrders.forEach(o => { %>
+      <tr>
+        <td><%= o.medicineId?.name %></td>
+        <td>₹<%= o.medicineId?.price %></td>
+        <td><%= o.status %></td>
+      </tr>
+    <% }) %>
+  </table>
+
+</div>
+
+<%- include("../partials/footer") %>

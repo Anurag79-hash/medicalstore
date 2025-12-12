@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Order Receipt</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<%- include("../partials/header.ejs") %>
+
+<div class="container">
+    <h2>Order Receipt</h2>
+
+    <div class="card">
+        <h3>Order Details</h3>
+
+        <p><strong>Order ID:</strong> <%= order._id %></p>
+        <p><strong>Date:</strong> <%= order.createdAt.toDateString() %></p>
+        <p><strong>Status:</strong> <%= order.status %></p>
+
+        <hr>
+
+        <h3>Customer</h3>
+        <p><strong>Name:</strong> <%= user.name %></p>
+        <p><strong>Email:</strong> <%= user.email %></p>
+
+        <hr>
+
+        <h3>Medicine</h3>
+        <p><strong>Name:</strong> <%= medicine.name %></p>
+        <p><strong>Category:</strong> <%= medicine.category %></p>
+        <p><strong>Form:</strong> <%= medicine.form %></p>
+        <p><strong>Price:</strong> ₹<%= order.price %></p>
+        <p><strong>Discount:</strong> <%= order.discount || 0 %></p>
+        <h3><strong>Final Price:</strong> ₹<%= order.finalPrice %></h3>
+
+        <img src="/uploads/medicines/<%= medicine.image %>" 
+             style="width:200px; height:200px; margin-top:10px;" />
+    </div>
+
+    <br>
+
+    <a href="/" class="btn btn-primary">Back to Home</a>
+</div>
+
+<%- include("../partials/footer.ejs") %>
+
+</body>
+</html>

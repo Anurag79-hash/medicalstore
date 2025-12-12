@@ -1,0 +1,8 @@
+<h2>Checkout</h2>
+<p>You are buying: <strong><%= medicine.name %></strong></p>
+
+<p>Price: ₹<%= medicine.price %></p>
+
+<form action="/confirm-purchase/<%= medicine._id %>" method="post">
+  <button>Confirm Purchase</button>
+</form>

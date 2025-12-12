@@ -1,0 +1,24 @@
+<%- include('../partials/header') %>
+<div class="container">
+  <h3>Expired Medicines</h3>
+  <div class="form">
+    <table class="table">
+      <thead><tr><th>Name</th><th>Brand</th><th>Expiry</th><th>Action</th></tr></thead>
+      <tbody>
+        <% meds.forEach(m => { %>
+          <tr>
+            <td><%= m.name %></td>
+            <td><%= m.brand %></td>
+            <td><%= m.expiryDate ? m.expiryDate.toISOString().split('T')[0] : '-' %></td>
+            <td>
+              <form method="POST" action="/admin/archive/<%= m._id %>">
+                <button class="btn btn-primary">Archive</button>
+              </form>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</div>
+<%- include('../partials/footer') %>
